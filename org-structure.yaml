@@ -1,41 +1,39 @@
+defaults:
+  level_1_ou: &level_1_ou
+    parent: root
+    level: 1
+    scps: []
+  workloads_child_ou: &workloads_child_ou
+    parent: workloads
+    level: 2
+    scps: []
 root:
   scps:
     - deny-leave-org
 
 organizational_units:
   - key: sandbox
+    <<: *level_1_ou
     name: Sandbox
-    parent: root
-    level: 1
-    scps: []
 
   - key: security
+    <<: *level_1_ou
     name: Security
-    parent: root
-    level: 1
-    scps: []
 
   - key: infrastructure
+    <<: *level_1_ou
     name: Infrastructure
-    parent: root
-    level: 1
-    scps: []
 
   - key: workloads
+    <<: *level_1_ou
     name: Workloads
-    parent: root
-    level: 1
-    scps: []
 
   - key: prod
+    <<: *workloads_child_ou
     name: Prod
-    parent: workloads
-    level: 2
     scps:
       - prod-guardrails
 
   - key: staging
+    <<: *workloads_child_ou
     name: Staging
-    parent: workloads
-    level: 2
-    scps: []
