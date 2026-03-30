@@ -1,0 +1,41 @@
+root:
+  scps:
+    - deny-leave-org
+
+organizational_units:
+  - key: sandbox
+    name: Sandbox
+    parent: root
+    level: 1
+    scps: []
+
+  - key: security
+    name: Security
+    parent: root
+    level: 1
+    scps: []
+
+  - key: infrastructure
+    name: Infrastructure
+    parent: root
+    level: 1
+    scps: []
+
+  - key: workloads
+    name: Workloads
+    parent: root
+    level: 1
+    scps: []
+
+  - key: prod
+    name: Prod
+    parent: workloads
+    level: 2
+    scps:
+      - prod-guardrails
+
+  - key: staging
+    name: Staging
+    parent: workloads
+    level: 2
+    scps: []
