@@ -37,3 +37,9 @@ organizational_units:
   - key: staging
     <<: *workloads_child_ou
     name: Staging
+
+accounts:
+  - key: audit-logs
+    id: "025277631194"
+    scps:
+      - protect-audit-logs-s3
