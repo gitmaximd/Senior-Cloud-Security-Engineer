@@ -5,9 +5,25 @@
       "Sid": "DenyDeleteCompanyAuditLogsBucket",
       "Effect": "Deny",
       "Action": [
-        "s3:DeleteBucket"
+        "s3:DeleteBucket",
+        "s3:PutBucketPolicy",
+        "s3:DeleteBucketPolicy",
+        "s3:PutLifecycleConfiguration",
+        "s3:DeleteBucketLifecycle"
       ],
       "Resource": "arn:aws:s3:::company-audit-logs-bucket"
+    },
+    {
+      "Sid": "DenyDeleteCloudTrailLogObjects",
+      "Effect": "Deny",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion"
+      ],
+      "Resource": [
+        "arn:aws:s3:::company-audit-logs-bucket/AWSLogs/252414134922/*",
+        "arn:aws:s3:::company-audit-logs-bucket/AWSLogs/o-19z5b7tb8w/*"
+      ]
     }
   ]
 }
