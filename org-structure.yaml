@@ -38,6 +38,10 @@ organizational_units:
     <<: *workloads_child_ou
     name: Staging
 
+  - key: policy-staging
+    <<: *level_1_ou
+    name: Policy-Staging
+
 accounts:
   - key: audit-logs
     id: "025277631194"
