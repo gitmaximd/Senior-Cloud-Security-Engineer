@@ -10,6 +10,13 @@ locals {
     })
   }
 
+  accounts = {
+    for account in try(local.org_data.accounts, []) :
+    account.key => merge(account, {
+      scps = try(account.scps, [])
+    })
+  }
+
   ou_level_1_ids = { for k, m in module.ou_level_1 : k => m.id }
   ou_level_2_ids = merge(
     local.ou_level_1_ids,
@@ -47,6 +54,17 @@ locals {
             target_id      = local.ou_ids[ou_key]
             target_type    = "ou"
             target_key     = ou_key
+          }
+        ]
+      ]),
+      flatten([
+        for account_key, account in local.accounts : [
+          for policy_key in account.scps : {
+            attachment_key = "account:${account_key}:${policy_key}"
+            policy_key     = policy_key
+            target_id      = account.id
+            target_type    = "account"
+            target_key     = account_key
           }
         ]
       ])
