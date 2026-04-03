@@ -2,11 +2,13 @@ defaults:
   level_1_ou: &level_1_ou
     parent: root
     level: 1
-    scps: []
+    scps:
+      - deny-disabling-cloudtrail
   workloads_child_ou: &workloads_child_ou
     parent: workloads
     level: 2
-    scps: []
+    scps:
+      - deny-disabling-cloudtrail
 root:
   scps:
     - deny-leave-org
@@ -15,6 +17,7 @@ organizational_units:
   - key: sandbox
     <<: *level_1_ou
     name: Sandbox
+    scps: []
 
   - key: security
     <<: *level_1_ou

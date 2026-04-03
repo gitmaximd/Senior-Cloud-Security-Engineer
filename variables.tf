@@ -8,8 +8,9 @@ variable "scp_policy_files" {
   description = "Map of SCP logical key to JSON file path"
   type        = map(string)
   default = {
-    deny-leave-org         = "./policies/deny-leave-org.json"
-    prod-guardrails        = "./policies/prod-guardrails.json"
-    protect-audit-logs-s3  = "./policies/protect-audit-logs-s3.json"
+    deny-leave-org            = "./policies/deny-leave-org.json"
+    prod-guardrails           = "./policies/prod-guardrails.json"
+    protect-audit-logs-s3     = "./policies/protect-audit-logs-s3.json"
+    deny-disabling-cloudtrail = "./policies/deny-disabling-cloudtrail.json"
   }
 }
