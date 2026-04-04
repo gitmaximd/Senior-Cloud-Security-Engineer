@@ -2,22 +2,14 @@ defaults:
   level_1_ou: &level_1_ou
     parent: root
     level: 1
-    scps:
-      - deny-disabling-cloudtrail
   workloads_child_ou: &workloads_child_ou
     parent: workloads
     level: 2
-    scps:
-      - deny-disabling-cloudtrail
-root:
-  scps:
-    - deny-leave-org
 
 organizational_units:
   - key: sandbox
     <<: *level_1_ou
     name: Sandbox
-    scps: []
 
   - key: security
     <<: *level_1_ou
@@ -34,8 +26,6 @@ organizational_units:
   - key: prod
     <<: *workloads_child_ou
     name: Prod
-    scps:
-      - prod-guardrails
 
   - key: staging
     <<: *workloads_child_ou
@@ -48,5 +38,3 @@ organizational_units:
 accounts:
   - key: audit-logs
     id: "025277631194"
-    scps:
-      - protect-audit-logs-s3

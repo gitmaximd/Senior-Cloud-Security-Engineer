@@ -11,3 +11,7 @@ output "scp_ids" {
     for k, v in aws_organizations_policy.scp : k => v.id
   }
 }
+
+output "account_ids" {
+  value = local.accounts
+}
