@@ -1,0 +1,7 @@
+organizational_units:
+  - target: policy-staging
+    policies:
+      - deny-disabling-cloudtrail
+      - prod-guardrails
+      - protect-audit-logs-s3
+      - deny-leave-org

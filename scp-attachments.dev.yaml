@@ -1,0 +1,4 @@
+organizational_units:
+  - target: staging
+    policies:
+      - deny-disabling-cloudtrail

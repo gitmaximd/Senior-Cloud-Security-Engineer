@@ -5,16 +5,12 @@ locals {
 
   organizational_units = {
     for ou in try(local.org_data.organizational_units, []) :
-    ou.key => merge(ou, {
-      scps = try(ou.scps, [])
-    })
+    ou.key => ou
   }
 
   accounts = {
     for account in try(local.org_data.accounts, []) :
-    account.key => merge(account, {
-      scps = try(account.scps, [])
-    })
+    account.key => account.id
   }
 
   ou_level_1_ids = { for k, m in module.ou_level_1 : k => m.id }
@@ -34,45 +30,7 @@ locals {
     local.ou_level_4_ids,
     { for k, m in module.ou_level_5 : k => m.id }
   )
-
-  scp_attachments_by_key = {
-    for item in concat(
-      [
-        for policy_key in try(local.org_data.root.scps, []) : {
-          attachment_key = "root:${policy_key}"
-          policy_key     = policy_key
-          target_id      = local.root_id
-          target_type    = "root"
-          target_key     = "root"
-        }
-      ],
-      flatten([
-        for ou_key, ou in local.organizational_units : [
-          for policy_key in ou.scps : {
-            attachment_key = "ou:${ou_key}:${policy_key}"
-            policy_key     = policy_key
-            target_id      = local.ou_ids[ou_key]
-            target_type    = "ou"
-            target_key     = ou_key
-          }
-        ]
-      ]),
-      flatten([
-        for account_key, account in local.accounts : [
-          for policy_key in account.scps : {
-            attachment_key = "account:${account_key}:${policy_key}"
-            policy_key     = policy_key
-            target_id      = account.id
-            target_type    = "account"
-            target_key     = account_key
-          }
-        ]
-      ])
-    ) :
-    item.attachment_key => item
-  }
 }
-
 
 data "aws_organizations_organization" "current" {}
 
@@ -85,7 +43,7 @@ resource "aws_organizations_policy" "scp" {
 }
 
 module "ou_level_1" {
-  source = "./modules/org_unit"
+  source = "../org_unit"
 
   for_each = {
     for k, v in local.organizational_units : k => v if v.level == 1
@@ -96,7 +54,7 @@ module "ou_level_1" {
 }
 
 module "ou_level_2" {
-  source = "./modules/org_unit"
+  source = "../org_unit"
 
   for_each = {
     for k, v in local.organizational_units : k => v if v.level == 2
@@ -109,7 +67,7 @@ module "ou_level_2" {
 }
 
 module "ou_level_3" {
-  source = "./modules/org_unit"
+  source = "../org_unit"
 
   for_each = {
     for k, v in local.organizational_units : k => v if v.level == 3
@@ -122,7 +80,7 @@ module "ou_level_3" {
 }
 
 module "ou_level_4" {
-  source = "./modules/org_unit"
+  source = "../org_unit"
 
   for_each = {
     for k, v in local.organizational_units : k => v if v.level == 4
@@ -135,7 +93,7 @@ module "ou_level_4" {
 }
 
 module "ou_level_5" {
-  source = "./modules/org_unit"
+  source = "../org_unit"
 
   for_each = {
     for k, v in local.organizational_units : k => v if v.level == 5
@@ -145,13 +103,4 @@ module "ou_level_5" {
   parent_id = local.ou_level_4_ids[each.value.parent]
 
   depends_on = [module.ou_level_4]
-}
-
-module "scp_attachments" {
-  source = "./modules/scp_attachment"
-
-  for_each = local.scp_attachments_by_key
-
-  policy_id = aws_organizations_policy.scp[each.value.policy_key].id
-  target_id = each.value.target_id
 }

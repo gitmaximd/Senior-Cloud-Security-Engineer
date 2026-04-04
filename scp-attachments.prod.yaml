@@ -1,0 +1,18 @@
+root:
+  policies:
+    - deny-leave-org
+
+organizational_units:
+  - target: security
+    policies:
+      - deny-disabling-cloudtrail
+
+  - target: prod
+    policies:
+      - deny-disabling-cloudtrail
+      - prod-guardrails
+
+accounts:
+  - target: audit-logs
+    policies:
+      - protect-audit-logs-s3
